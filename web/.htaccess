@@ -7,7 +7,10 @@ Header set Access-Control-Allow-Origin "*"
 	
 	RewriteEngine on
 	RewriteBase /
-	RewriteCond %{REQUEST_METHOD} PUT
-	RewriteRule ^(.*)$ put.php [L]
+	RewriteCond %{REQUEST_METHOD} PUT [NC]
+	RewriteCond %{REQUEST_URI} !^/put.php$
+	RewriteRule ^(.*)$ /put.php [L,PT]
 </Limit>
+DirectoryIndex index.html index.php
+FallbackResource  /lookup.php
 Options +Indexes

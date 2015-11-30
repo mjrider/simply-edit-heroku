@@ -1,15 +1,24 @@
 <?php
+	error_log("Inside put handler",4);
+	$fs = require_once('/app/init.php');
+
 	if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
 		header("HTTP/1.1 403 Bad request");
 		exit;
 	}
 
 	function checkTarget($target) {
-		return $target == "data.json";
+		error_log("Target = ".$target."\n");
+		return $target == "data/data.json";
 	}
 
-	$target = "data.json"; // $_SERVER["REQUEST_URI"];
-	if (!checkTarget($target)) {
+	$prefix = '/';
+
+	$path = $_SERVER["REQUEST_URI"];
+	$path = substr($path,strlen($prefix));
+
+
+	if (!checkTarget($path)) {
 		header("HTTP/1.1 404 Not found");
 		exit;
 	}
@@ -17,24 +26,6 @@
 	/* PUT data comes in on the stdin stream */
 	$putdata = fopen("php://input", "r");
 
-	/* Open a file for writing */
-	// $temp = tempnam("data/", "puthandler-");
-	$temp = "data/$target";
-	$fp = fopen($temp, "w");
+	$fs->putStream($path, $putdata);
 
-	/* Read the data 65 KB at a time and write to the file */
-	while ($data = fread($putdata, 65535)) {
-		fwrite($fp, $data);	
-		echo $data;
-	}
-
-	/* Close the streams */
-	fclose($fp);
-	fclose($putdata);
-
-	/* Create dirs if needed */
-
-	/* Put the file in place */
-
-	// rename($temp, "data/$target");
 ?>
