@@ -1,5 +1,4 @@
 <?php
-	error_log("Inside put handler",4);
 	$fs = require_once('/app/init.php');
 
 	if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
